@@ -32,18 +32,13 @@ def send_tlg_message(msg):
 def copy_base(base_filename, path_to_save):
     Log.logger.info('Соединяемся по FTP и копируем базу на сервер...')
     try:
-        #print(BASE_HOST_IP, BASE_HOST_PORT, BASE_HOST_USER, BASE_HOST_PASS)
         ftp = FTP_TLS()
-        #ftp.connect('192.168.1.38', 21, 10)
-        #ftp.login('vlazer_base', 'vlazer_base2')
         ftp.connect(BASE_HOST_IP, int(BASE_HOST_PORT), 10)
         ftp.login(BASE_HOST_USER, BASE_HOST_PASS)
         ftp.prot_p()
-        #Log.logger.debug(ftp)
         Log.logger.debug(str(path_to_save))
         with open(path_to_save, 'wb') as f:
             ftp.retrbinary('RETR ' + str(base_filename), f.write)
-        #print(1)
         filesize = round((float(os.path.getsize(path_to_save)))/1024/1024, 2)
         msg = f'Бэкап базы создан на сервере, размер {filesize} Мб'
         Log.logger.info(msg)
